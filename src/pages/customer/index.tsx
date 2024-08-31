@@ -15,8 +15,24 @@ export default function Customer() {
             // Token yoksa kullanıcıyı login sayfasına yönlendirin
             router.push('/customer/login');
         }
-    }, [router]);
 
+        getLink()
+    }, [router]);
+    const getLink = async () => {
+        const token = localStorage.getItem('jwtToken');
+        try {
+            const response = await axios.get('http://localhost:8080/protected/getQR', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            console.log('Başarılı:', response.data);
+            setLink(response.data.link)
+            setQr(true);
+        } catch (error) {
+            console.error('Hata:', error.response ? error.response.data : error.message);
+        }
+    }
     const generateQR = async () => {
         const token = localStorage.getItem('jwtToken');
         try {
@@ -35,7 +51,8 @@ export default function Customer() {
     return (
         <>
             <p>Fotoğrafları Yüklenmesi için Gereken QR kodu Oluştur</p>
-            <button onClick={generateQR} className='bg-green-500 px-5 py-2 rounded-md text-white hover:bg-green-700'>Oluştur</button>
+            {link ? <button disabled onClick={generateQR} className='bg-gray-500 px-5 py-2 rounded-md text-white hover:bg-gray-700'>Oluştur</button> : <button onClick={generateQR} className='bg-green-500 px-5 py-2 rounded-md text-white hover:bg-green-700'>Oluştur</button>}
+
             {qr && <QRCode value={link} />}
 
         </>);
