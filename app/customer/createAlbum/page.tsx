@@ -1,4 +1,5 @@
 "use client"
+
 import React, { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import {
@@ -14,7 +15,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { postCreateAlbum } from '@/lib/actions/album.actions'
 import apiClient from '@/app/utils/api/ApiClient'
+import { useSession } from 'next-auth/react';
+
 function createAlbum() {
+    const { data: session } = useSession();
+    const token = session.accessToken;
+
     const [inputValue, setInputValue] = useState('');
 
     // input değiştiğinde çalışacak fonksiyon
@@ -24,11 +30,13 @@ function createAlbum() {
 
     };
     const handleSubmit = async () => {
-        // const response = await postCreateAlbum({ name: inputValue })
-        const { data } = await apiClient.post("/protected/createAlbum", { name: inputValue })
-
-        console.log(data);
-
+        try {
+            const response = await postCreateAlbum({ name: inputValue }, token)
+            // const { data } = await apiClient.post("/protected/createAlbum", { name: inputValue })
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
     }
     return (
         <div className='m-10'>
