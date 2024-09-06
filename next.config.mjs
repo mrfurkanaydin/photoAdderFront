@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["localhost"] // 'localhost' üzerinden resimlere izin veriyoruz
+    domains: ["localhost","api.furkanaydin.net"] // 'localhost' üzerinden resimlere izin veriyoruz
   }
 };
 
