@@ -8,6 +8,7 @@ export default withAuth({
 });
 
 export const config = {
+  // matcher: ["/customer/album", "/customer/album/:path*", "/album/:path*"]
   matcher: ["/customer/album", "/customer/album/:path*"]
 };
 // export const config = { matcher: ['/customer/:path*', "/uploads/:path*"] };

@@ -101,9 +101,29 @@ export const upload = async (values, token) => {
 
 export const createAlbumImage = async (values, token) => {
   try {
-    const { data } = await apiClient.post("/protected/createAlbumImage", values, {
+    const { data } = await apiClient.post(
+      "/protected/createAlbumImage",
+      values,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    console.log("Request successful:", data);
+    return data;
+  } catch (error) {
+    console.log("Request error:", error);
+    return null;
+  }
+};
+
+export const getAllUserImages = async (id, token) => {
+  try {
+    const { data } = await apiClient.get("/protected/getAllUserImages/" + id, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`
       }
     });
 

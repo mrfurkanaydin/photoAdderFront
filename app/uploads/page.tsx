@@ -14,11 +14,11 @@ function uploads() {
         router.push('/uploads/register')
     }
     const handleLogin = () => {
-        router.push('/uploads/signin')
+        router.push(`/customer/signin?callbackUrl=%2Falbum%2F${JSON.parse(id)}`)
     }
 
     const handleGuest = () => {
-        router.push('/uploads/' + JSON.parse(id))
+        router.push('/uploads/album/' + JSON.parse(id))
     }
 
     return (
@@ -28,7 +28,7 @@ function uploads() {
                 {/* <CardDescription>Deploy your new project in one-click.</CardDescription> */}
                 <p className='text-sm text-center opacity-50'>Yüklediğiniz Fotoğrafları Görmeniz İçindir</p>
                 <Separator />
-                <Button onClick={handleGuest}>Misafir Olarak Devam Et</Button>
+                <Button disabled onClick={handleGuest}>Misafir Olarak Devam Et</Button>
                 <p className='text-sm text-center opacity-50'>Daha Sonra Kayıt Olma Adımına Dönebilirsiniz</p>
                 <Separator />
                 <Button onClick={handleLogin} variant="outline">Giriş Yap</Button>

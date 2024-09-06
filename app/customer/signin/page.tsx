@@ -43,7 +43,7 @@ export default function UserAuthForm() {
     const result = await signIn('credentials', {
       email: data.email,
       password: data.password,
-      callbackUrl: callbackUrl
+      callbackUrl: callbackUrl || "/"
     });
     setLoading(false);
 

@@ -15,7 +15,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { postRegister } from "@/lib/actions/auth.actions"
 import { useRouter } from "next/navigation"
@@ -30,7 +30,13 @@ type UserFormValue = z.infer<typeof formSchema>;
 
 export default function Register() {
     const [loading, setLoading] = useState(false);
+    const [id, setId] = useState("")
     const router = useRouter();
+
+    useEffect(() => {
+        setId(localStorage.getItem("id"))
+    }, []);
+    
     const defaultValues = {
         email: '',
         password: '',
@@ -46,7 +52,7 @@ export default function Register() {
         const data = await postRegister(values);
         console.log(data)
         if (data.status == 200) {
-            router.push('/uploads/signin');
+            router.push(`/customer/signin?callbackUrl=%2Falbum%2F${JSON.parse(id)}`);
         }
     }
 
