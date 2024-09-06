@@ -149,6 +149,7 @@ function page() {
                             <Image
                                 src={photo.image_url}
                                 alt={`Photo ${index + 1}`}
+                                priority={index < 3}
                                 width={500}
                                 height={300}
                                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
@@ -192,9 +193,8 @@ function page() {
                                 <Image
                                     src={photos[currentIndex].image_url}
                                     alt={`Photo ${currentIndex + 1}`}
-                                    layout="fill"
-                                    objectFit="contain" // Kenar boşlukları için contain kullanıyoruz
-                                    className="rounded-lg"
+                                    fill
+                                    className="rounded-lg object-contain"
                                 />
                                 {/* İndirme Butonu */}
                                 {/* <button
