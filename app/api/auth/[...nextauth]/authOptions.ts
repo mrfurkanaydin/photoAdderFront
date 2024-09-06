@@ -51,12 +51,12 @@ export const authOptions: NextAuthOptions = {
       if (session?.user) session.user.role = token.role;
       return session;
     },
-    async redirect({ url, baseUrl }) {
-      if (url.startsWith(baseUrl)) return url;
-      if (url.startsWith("/uploads")) return url; // uploads oturum yönlendirmesi
-      if (url.startsWith("/customer")) return "/customer"; // customer oturum yönlendirmesi
-      return baseUrl;
-    }
+    // async redirect({ url, baseUrl }) {
+    //   if (url.startsWith(baseUrl)) return url;
+    //   // if (url.startsWith("/uploads")) return url; // uploads oturum yönlendirmesi
+    //   // if (url.startsWith("/customer")) return "/customer"; // customer oturum yönlendirmesi
+    //   return baseUrl;
+    // }
   },
   session: {
     strategy: "jwt",
