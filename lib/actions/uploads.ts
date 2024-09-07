@@ -10,7 +10,6 @@ export const createAlbumUser = async (values, token) => {
       }
     });
 
-    console.log("Request successful:", data);
     return data;
   } catch (error) {
     console.log("Request error:", error);

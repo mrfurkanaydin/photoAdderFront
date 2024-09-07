@@ -2,7 +2,7 @@
 
 import apiClient from "@/app/utils/api/ApiClient";
 
-export const postCreateAlbum = async (values, token) => {
+export const CreateAlbum = async (values, token) => {
   try {
     const { data } = await apiClient.post("/protected/createAlbum", values, {
       headers: {
@@ -33,6 +33,20 @@ export const getAlbums = async (token) => {
     return null;
   }
 };
+export const getAlbum = async (id, token) => {
+  try {
+    const { data } = await apiClient.get("/protected/getAlbum/" + id, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    return data;
+  } catch (error) {
+    console.log("Request error:", error);
+    return null;
+  }
+};
 
 export const getQR = async (token) => {
   try {
@@ -42,7 +56,6 @@ export const getQR = async (token) => {
       }
     });
 
-    console.log("Request successful:", data);
     return data;
   } catch (error) {
     console.log("Request error:", error);
@@ -58,7 +71,6 @@ export const getAllAlbumImages = async (id, token) => {
       }
     });
 
-    console.log("Request successful:", data);
     return data;
   } catch (error) {
     console.log("Request error:", error);
@@ -74,7 +86,6 @@ export const generateQR = async (values, token) => {
       }
     });
 
-    console.log("Request successful:", data);
     return data;
   } catch (error) {
     console.log("Request error:", error);
@@ -91,7 +102,6 @@ export const upload = async (values, token) => {
       }
     });
 
-    console.log("Request successful:", data);
     return data;
   } catch (error) {
     console.log("Request error:", error);
@@ -111,7 +121,6 @@ export const createAlbumImage = async (values, token) => {
       }
     );
 
-    console.log("Request successful:", data);
     return data;
   } catch (error) {
     console.log("Request error:", error);
@@ -127,7 +136,25 @@ export const getAllUserImages = async (id, token) => {
       }
     });
 
-    console.log("Request successful:", data);
+    return data;
+  } catch (error) {
+    console.log("Request error:", error);
+    return null;
+  }
+};
+
+export const UpdateAlbumName = async (id, values, token) => {
+  try {
+    const { data } = await apiClient.put(
+      "/protected/updateAlbumName/" + id,
+      values,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
     return data;
   } catch (error) {
     console.log("Request error:", error);

@@ -1,11 +1,12 @@
 "use client"
-import { createAlbumImage, generateQR, getAllAlbumImages, getQR, upload } from '@/lib/actions/album.actions';
+import { createAlbumImage, generateQR, getAlbum, getAllAlbumImages, getQR, upload } from '@/lib/actions/album.actions';
 import { useSession } from 'next-auth/react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import QRCode from 'react-qr-code';
 import ImageGallery from '@/components/imageGallery';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 
 function page() {
     const [qr, setQr] = useState(false)
@@ -13,15 +14,35 @@ function page() {
     const [photos, setPhotos] = useState([])
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
+    const [loading, setLoading] = useState(true);
     const { data: session } = useSession();
+    const router = useRouter();
     const token = session.accessToken;
+    const user = session.user
     const params = useParams();
     const { id } = params;
     useEffect(() => {
         fetchDatas()
+        setLoading(false)
     }, []);
 
     const fetchDatas = async () => {
+        try {
+            const { albums } = await getAlbum(id, token);
+            if (albums.ID == 0) {
+                router.push("/unauthorized")
+                return <></>
+            }
+        } catch (error: any) {
+            console.error('Hata:', error.response ? error.response.data : error.message);
+        }
+        try {
+            const photo = await getAllAlbumImages(id, token);
+            setPhotos(photo.albumImages)
+            console.log(photo.albumImages);
+        } catch (error: any) {
+            console.error('Hata:', error.response ? error.response.data : error.message);
+        }
         try {
             const qr = await getQR(token);
             setLink(qr.link)
@@ -29,14 +50,17 @@ function page() {
         } catch (error: any) {
             console.error('Hata:', error.response ? error.response.data : error.message);
         }
-        try {
-            const photo = await getAllAlbumImages(id, token);
-            setPhotos(photo.albumImages)
-        } catch (error: any) {
-            console.error('Hata:', error.response ? error.response.data : error.message);
-        }
-    }
 
+    }
+    if (loading) {
+        return <div className="flex items-center space-x-4">
+            <Skeleton className="h-12 w-12 rounded-full" />
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+            </div>
+        </div>
+    }
     const generateQRsubmit = async () => {
         try {
             const response = await generateQR({ "album_id": id }, token);

@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
           );
 
           const data = res.data;
-
+          
           if (data.user && data.token) {
             return { ...data.user, token: data.token };
           } else {
@@ -42,15 +42,18 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.accessToken = (user as any).token;
+        token.ID = user.ID;
         token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken as string;
+
       if (session?.user) session.user.role = token.role;
+      if (session?.user) session.user.ID = token.ID;
       return session;
-    },
+    }
     // async redirect({ url, baseUrl }) {
     //   if (url.startsWith(baseUrl)) return url;
     //   // if (url.startsWith("/uploads")) return url; // uploads oturum yönlendirmesi
@@ -62,6 +65,11 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
     maxAge: 1800,
     updateAge: 0
+  },
+  jwt: {
+    // The maximum age of the NextAuth.js issued JWT in seconds.
+    // Defaults to `session.maxAge`.
+    maxAge: 60 * 30
   },
   secret: process.env.NEXTAUTH_SECRET
 };
