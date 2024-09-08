@@ -35,11 +35,11 @@ function ImageGalleryUser({ photos }) {
     return (
         <>
             <div className="grid grid-cols-3 gap-6 mt-3">
-                <div></div>
                 <div className="text-3xl font-bold">Fotoğraf Galerisi</div>
                 <div className='lg:flex gap-2 justify-center items-center hidden lg:show'>
                     <div>Filtreler:</div>
                     <Button onClick={() => setFilterCol(4)}>4 li</Button>
+                    <Button onClick={() => setFilterCol(6)}>6 lı</Button>
                     <Button onClick={() => setFilterCol(12)}>12 li</Button>
                 </div>
 

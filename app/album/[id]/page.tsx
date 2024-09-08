@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button';
 import ImageGallery from '@/components/imageGallery';
 import ImageGalleryUser from '@/components/imageGalleryUser';
 function uploads() {
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState(null);
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // Çoklu dosyalar
+    const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const [photos, setPhotos] = useState([]);
     const { data: session, status } = useSession();
     const token = session?.accessToken;
@@ -37,31 +37,44 @@ function uploads() {
     const getAlbumImage = async () => {
         const response = await getAllUserImages(id, token)
         console.log("getAlbumImage", response);
-        setPhotos(response.albumImages)
+        setPhotos(response?.albumImages)
     }
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setSelectedFile(file);
-        setPreviewUrl(URL.createObjectURL(file)); // Dosya seçildiğinde bir ön izleme gösteriyoruz
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || []); // Çoklu dosyalar alınıyor
+        setSelectedFiles(files); // Dosyalar state'e ekleniyor
+
+        // Her bir dosya için önizleme URL'si oluştur
+        const previews = files.map(file => URL.createObjectURL(file));
+        setPreviewUrls(previews); // Önizleme URL'leri state'e ekleniyor
     };
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!selectedFile) {
-            alert('Lütfen bir dosya seçin');
+        if (selectedFiles?.length === 0) {
+            alert('Lütfen bir veya daha fazla dosya seçin');
             return;
         }
 
-        const formData = new FormData();
-        formData.append('image', selectedFile);
-
         try {
-            const response = await upload(formData, token);
-            await createAlbumImage({ "album_id": id, "image_url": response.image_url }, token)
-            getAlbumImage()
+            // Her bir dosya için yükleme işlemini yap
+            for (const file of selectedFiles) {
+                const formData = new FormData();
+                formData.append('image', file);
+
+                // Dosyayı sunucuya yükle
+                const response = await upload(formData, token);
+
+                // Yüklenen dosyanın URL'sini albüme ekle
+                await createAlbumImage({ album_id: id, image_url: response.image_url }, token);
+            }
+
+            // Albüm resimlerini yenile
+            getAlbumImage();
+            setPreviewUrls([])
+            setSelectedFiles([])
         } catch (error) {
-            console.error('Error uploading the file:', error);
+            console.error('Error uploading the files:', error);
             alert('Yükleme sırasında hata oluştu.');
         }
     };
@@ -71,16 +84,21 @@ function uploads() {
                 <input
                     type="file"
                     accept="image/*"
+                    multiple
                     onChange={handleFileChange}
                     className="mb-4"
                 />
-                {previewUrl && (
-                    <img
-                        src={previewUrl}
-                        alt="Preview"
-                        className="mb-4 w-64 h-64 object-cover"
-                    />
-                )}
+                {/* Çoklu önizleme gösterimi */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                    {previewUrls.map((url, index) => (
+                        <img
+                            key={index}
+                            src={url}
+                            alt={`Preview ${index + 1}`}
+                            className="w-64 h-64 object-cover"
+                        />
+                    ))}
+                </div>
                 <Button
                     type="submit"
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
@@ -89,7 +107,7 @@ function uploads() {
                 </Button>
             </form>
 
-            {photos.length > 0 ? <ImageGalleryUser photos={photos} /> : <> Henüz Hiç Fotoğraf Yüklenmedi</>}
+            {photos?.length > 0 ? <ImageGalleryUser photos={photos} /> : <> Henüz Hiç Fotoğraf Yüklenmedi</>}
         </div>
     )
 }
