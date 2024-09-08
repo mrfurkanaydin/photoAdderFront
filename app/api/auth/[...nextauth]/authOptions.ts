@@ -42,16 +42,16 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.accessToken = (user as any).token;
-        token.ID = user.ID;
+        token.id = user.id;
         token.role = user.role;
-      }
+      }      
       return token;
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken as string;
 
       if (session?.user) session.user.role = token.role;
-      if (session?.user) session.user.ID = token.ID;
+      if (session?.user) session.user.id = token.id;
       return session;
     }
     // async redirect({ url, baseUrl }) {

@@ -30,7 +30,7 @@ function uploads() {
 
 
     const postAlbumUser = async () => {
-        const response = await createAlbumUser({ "album_id": Number(id) }, token)
+        const response = await createAlbumUser({ "album_id": id }, token)
         console.log("postAlbumUser", response);
     }
     const getAlbumImage = async () => {
@@ -57,7 +57,7 @@ function uploads() {
 
         try {
             const response = await upload(formData, token);
-            await createAlbumImage({ "album_id": Number(id), "image_url": response.image_url }, token)
+            await createAlbumImage({ "album_id": id, "image_url": response.image_url }, token)
             getAlbumImage()
         } catch (error) {
             console.error('Error uploading the file:', error);
