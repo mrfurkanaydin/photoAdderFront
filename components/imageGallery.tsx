@@ -4,6 +4,16 @@ import React, { useState } from 'react'
 import { FiArrowLeft, FiArrowRight, FiMinimize2 } from 'react-icons/fi'
 import { Button } from './ui/button';
 
+type Photo = {
+    id: string;
+    image_url: string;
+    user: {
+        email: string;
+        id: string;
+        role: string;
+    };
+};
+
 function ImageGallery({ photos, type }) {
     const [isOpen, setIsOpen] = useState(false); // Modal açık mı kapalı mı
     const [currentIndex, setCurrentIndex] = useState(0); // Şu anda hangi resim gösteriliyor
@@ -53,7 +63,7 @@ function ImageGallery({ photos, type }) {
     const groupedPhotos = groupByEmail(sortedPhotos); // Email'e göre gruplandır
 
     let displayedPhotos = []; // Modal için tüm fotoğrafların sıralı listesi
-    Object.values(groupedPhotos).forEach((group) => {
+    Object.values(groupedPhotos).forEach((group: Photo[]) => {
         displayedPhotos = [...displayedPhotos, ...group];
     });
 
