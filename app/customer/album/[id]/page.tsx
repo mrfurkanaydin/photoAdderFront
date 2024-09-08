@@ -29,10 +29,12 @@ function page() {
     const fetchDatas = async () => {
         try {
             const { albums } = await getAlbum(id, token);
-            // if (albums.id == 0) {
-            //     router.push("/unauthorized")
-            //     return <></>
-            // }
+            console.log(albums);
+            
+            if (albums.id == '00000000-0000-0000-0000-000000000000') {
+                router.push("/unauthorized")
+                return <></>
+            }
         } catch (error: any) {
             console.error('Hata:', error.response ? error.response.data : error.message);
         }

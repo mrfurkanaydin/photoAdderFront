@@ -19,7 +19,7 @@ function ImageGallery({ photos, type }) {
     const [currentIndex, setCurrentIndex] = useState(0); // Şu anda hangi resim gösteriliyor
     const [filterType, setFilterType] = useState("all"); // Filtre tipi
     const [sortedPhotos, setSortedPhotos] = useState([...photos]); // Sıralanmış fotoğrafları tutuyoruz
-    const [filterCol, setFilterCol] = useState("12"); // Sıralanmış fotoğrafları tutuyoruz
+    const [filterCol, setFilterCol] = useState(12); // Sıralanmış fotoğrafları tutuyoruz
 
     const openModal = (index) => {
         setCurrentIndex(index);
@@ -75,8 +75,8 @@ function ImageGallery({ photos, type }) {
                 {type === "customer" ? (
                     <div className='xl:flex gap-2 justify-center items-center hidden xl:show'>
                         <div>Filtreler:</div>
-                        <Button onClick={() => setFilterCol("4")}>4 li</Button>
-                        <Button onClick={() => setFilterCol("12")}>12 li</Button>||
+                        <Button onClick={() => setFilterCol(4)}>4 li</Button>
+                        <Button onClick={() => setFilterCol(12)}>12 li</Button>||
                         <Button onClick={sortByEmail}>Emaile Göre</Button> {/* Email'e göre sıralama */}
                         <Button onClick={() => {
                             setSortedPhotos([...photos]);
@@ -87,12 +87,12 @@ function ImageGallery({ photos, type }) {
             </div>
 
             <div className="mt-10">
-                {filterType === "email" ? (
+                {filterType === "email" && type === "customer" ? (
                     <>
                         {Object.keys(groupedPhotos).map((email, emailGroupIndex) => (
                             <div key={email}>
                                 <h2 className="text-xl font-bold mb-4">{email}</h2>
-                                <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${filterCol} gap-6`}>
+                                <div className={`grid grid-cols-1 sm:grid-cols-${filterCol} lg:grid-cols-${filterCol} gap-6`}>
                                     {groupedPhotos[email].map((photo, photoIndex) => (
                                         <div
                                             key={photo.id}
@@ -115,7 +115,7 @@ function ImageGallery({ photos, type }) {
                     </>
                 ) : (
                     <>
-                        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${filterCol} gap-6`}>
+                        <div className={`grid grid-cols-1 sm:grid-cols-${filterCol} lg:grid-cols-${filterCol} gap-6`}>
                             {photos?.map((photo, index) => (
                                 <div
                                     key={photo.id}

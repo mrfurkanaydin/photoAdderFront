@@ -6,6 +6,7 @@ import { createAlbumUser } from '@/lib/actions/uploads';
 import { createAlbumImage, getAllAlbumImages, getAllUserImages, upload } from '@/lib/actions/album.actions';
 import { Button } from '@/components/ui/button';
 import ImageGallery from '@/components/imageGallery';
+import ImageGalleryUser from '@/components/imageGalleryUser';
 function uploads() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
@@ -26,7 +27,7 @@ function uploads() {
         getAlbumImage()
 
     }, []);
-    console.log(status);
+    console.log(photos);
 
 
     const postAlbumUser = async () => {
@@ -35,7 +36,7 @@ function uploads() {
     }
     const getAlbumImage = async () => {
         const response = await getAllUserImages(id, token)
-        console.log("getAlbumImage", response.albumImages);
+        console.log("getAlbumImage", response);
         setPhotos(response.albumImages)
     }
 
@@ -87,7 +88,8 @@ function uploads() {
                     Yükle
                 </Button>
             </form>
-            <ImageGallery photos={photos} type="user" />
+
+            {photos.length > 0 ? <ImageGalleryUser photos={photos} /> : <> Henüz Hiç Fotoğraf Yüklenmedi</>}
         </div>
     )
 }
