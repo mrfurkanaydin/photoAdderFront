@@ -127,7 +127,7 @@ function page() {
             {qr && <QRCode value={link} />}
 
             <div className="p-10 text-center">
-                <ImageGallery photos={photos} />
+                <ImageGallery photos={photos} type="customer" />
             </div>
         </>
     )

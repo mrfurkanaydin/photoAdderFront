@@ -87,7 +87,7 @@ function uploads() {
                     Yükle
                 </Button>
             </form>
-            <ImageGallery photos={photos} />
+            <ImageGallery photos={photos} type="user" />
         </div>
     )
 }
