@@ -3,12 +3,17 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { FiArrowLeft, FiArrowRight, FiMinimize2 } from 'react-icons/fi'
 import { Button } from './ui/button';
+import clsx from 'clsx';
 
 function ImageGalleryUser({ photos }) {
     const [isOpen, setIsOpen] = useState(false); // Modal açık mı kapalı mı
     const [currentIndex, setCurrentIndex] = useState(0); // Şu anda hangi resim gösteriliyor
-    const [filterCol, setFilterCol] = useState("12");
-
+    const [filterCol, setFilterCol] = useState(12);
+    const gridClass = clsx({
+        "lg:grid-cols-4": filterCol === 4,
+        "lg:grid-cols-6": filterCol === 6,
+        "lg:grid-cols-12": filterCol === 12,
+    });
     const openModal = (index) => {
         setCurrentIndex(index);
         setIsOpen(true);
@@ -34,12 +39,12 @@ function ImageGalleryUser({ photos }) {
                 <div className="text-3xl font-bold">Fotoğraf Galerisi</div>
                 <div className='lg:flex gap-2 justify-center items-center hidden lg:show'>
                     <div>Filtreler:</div>
-                    <Button onClick={() => setFilterCol("4")}>4 li</Button>
-                    <Button onClick={() => setFilterCol("12")}>12 li</Button>
+                    <Button onClick={() => setFilterCol(4)}>4 li</Button>
+                    <Button onClick={() => setFilterCol(12)}>12 li</Button>
                 </div>
 
             </div>
-            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${filterCol} gap-6`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 ${gridClass} gap-6`}>
                 {photos?.map((photo, index) => (
                     <div
                         key={index}

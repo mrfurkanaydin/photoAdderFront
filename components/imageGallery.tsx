@@ -3,6 +3,7 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { FiArrowLeft, FiArrowRight, FiMinimize2 } from 'react-icons/fi'
 import { Button } from './ui/button';
+import clsx from "clsx";
 
 type Photo = {
     id: string;
@@ -20,7 +21,13 @@ function ImageGallery({ photos, type }) {
     const [filterType, setFilterType] = useState("all"); // Filtre tipi
     const [sortedPhotos, setSortedPhotos] = useState([...photos]); // Sıralanmış fotoğrafları tutuyoruz
     const [filterCol, setFilterCol] = useState(12); // Sıralanmış fotoğrafları tutuyoruz
+    
 
+    const gridClass = clsx({
+      "lg:grid-cols-2": filterCol === 2,
+      "lg:grid-cols-4": filterCol === 4,
+      "lg:grid-cols-12": filterCol === 12,
+    });
     const openModal = (index) => {
         setCurrentIndex(index);
         setIsOpen(true);
@@ -92,7 +99,7 @@ function ImageGallery({ photos, type }) {
                         {Object.keys(groupedPhotos).map((email, emailGroupIndex) => (
                             <div key={email}>
                                 <h2 className="text-xl font-bold mb-4">{email}</h2>
-                                <div className={`grid grid-cols-1 sm:grid-cols-${filterCol} lg:grid-cols-${filterCol} gap-6`}>
+                                <div className={`grid grid-cols-1 sm:grid-cols-2 ${gridClass} gap-6`}>
                                     {groupedPhotos[email].map((photo, photoIndex) => (
                                         <div
                                             key={photo.id}
@@ -115,7 +122,7 @@ function ImageGallery({ photos, type }) {
                     </>
                 ) : (
                     <>
-                        <div className={`grid grid-cols-1 sm:grid-cols-${filterCol} lg:grid-cols-${filterCol} gap-6`}>
+                        <div className={`grid grid-cols-1 sm:grid-cols-2 ${gridClass} gap-6`}>
                             {photos?.map((photo, index) => (
                                 <div
                                     key={photo.id}
