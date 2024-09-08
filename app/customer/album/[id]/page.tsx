@@ -29,10 +29,10 @@ function page() {
     const fetchDatas = async () => {
         try {
             const { albums } = await getAlbum(id, token);
-            if (albums.ID == 0) {
-                router.push("/unauthorized")
-                return <></>
-            }
+            // if (albums.id == 0) {
+            //     router.push("/unauthorized")
+            //     return <></>
+            // }
         } catch (error: any) {
             console.error('Hata:', error.response ? error.response.data : error.message);
         }

@@ -109,18 +109,22 @@ function Albums() {
                                     <TableHeader>
                                         <TableRow>
                                             <TableHead className="w-[100px]">Albüm Adı</TableHead>
+                                            <TableHead className=" text-center">Fotoğraf Sayısı</TableHead>
+                                            <TableHead className="text-center">Albüm Boyutu (MB)</TableHead>
                                             <TableHead className="text-right">İşlemler</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                         {albums?.map((album) => (
-                                            <TableRow key={album.ID} className=''>
+                                            <TableRow key={album.id} className=''>
                                                 <TableCell className="font-medium w-[200px]">{album.name}</TableCell>
+                                                <TableCell className="font-medium text-center">{album.image_count}</TableCell>
+                                                <TableCell className="font-medium text-center">{Math.ceil(album.total_size_mb)}</TableCell>
                                                 <TableCell className="text-right">
                                                     <div className='flex justify-end gap-4'>
 
-                                                        <DialogTrigger asChild onClick={() => handleEdit(album.ID, album.name)}><button><FiEdit3 /></button></DialogTrigger>
-                                                        <button onClick={() => handleView(album.ID)}><FiEye /></button>
+                                                        <DialogTrigger asChild onClick={() => handleEdit(album.id, album.name)}><button><FiEdit3 /></button></DialogTrigger>
+                                                        <button onClick={() => handleView(album.id)}><FiEye /></button>
                                                         {/* <FiTrash /> */}
 
                                                     </div>
