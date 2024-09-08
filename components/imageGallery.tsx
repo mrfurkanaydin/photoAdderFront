@@ -44,9 +44,18 @@ function ImageGallery({ photos, type }) {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % sortedPhotos.length);
     };
 
+    const nextImageBase = () => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % photos.length);
+    };
+
     const prevImage = () => {
         setCurrentIndex((prevIndex) =>
             prevIndex === 0 ? sortedPhotos.length - 1 : prevIndex - 1
+        );
+    };
+    const prevImageBase = () => {
+        setCurrentIndex((prevIndex) =>
+            prevIndex === 0 ? photos.length - 1 : prevIndex - 1
         );
     };
 
@@ -176,25 +185,25 @@ function ImageGallery({ photos, type }) {
                             >
                                 <FiMinimize2 />
                             </button>
-
-                            {/* Sol Ok */}
-                            <button
-                                onClick={prevImage}
-                                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full text-black hover:bg-gray-300 z-50"
-                            >
-                                <FiArrowLeft />
-                            </button>
-
-                            {/* Sağ Ok */}
-                            <button
-                                onClick={nextImage}
-                                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full text-black hover:bg-gray-300 z-50"
-                            >
-                                <FiArrowRight />
-                            </button>
-                            {/* Seçili Resim */}
                             {
                                 filterType === "email" ? <>
+                                    {/* Sol Ok */}
+                                    <button
+                                        onClick={prevImage}
+                                        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full text-black hover:bg-gray-300 z-50"
+                                    >
+                                        <FiArrowLeft />
+                                    </button>
+
+                                    {/* Sağ Ok */}
+                                    <button
+                                        onClick={nextImage}
+                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full text-black hover:bg-gray-300 z-50"
+                                    >
+                                        <FiArrowRight />
+                                    </button>
+                                    {/* Seçili Resim */}
+
                                     <Image
                                         src={displayedPhotos[currentIndex].image_url}
                                         alt={`Photo ${currentIndex + 1}`}
@@ -202,6 +211,21 @@ function ImageGallery({ photos, type }) {
                                         className="rounded-lg object-contain"
                                     />
                                 </> : <>
+                                    {/* Sol Ok */}
+                                    <button
+                                        onClick={prevImageBase}
+                                        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full text-black hover:bg-gray-300 z-50"
+                                    >
+                                        <FiArrowLeft />
+                                    </button>
+
+                                    {/* Sağ Ok */}
+                                    <button
+                                        onClick={nextImageBase}
+                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full text-black hover:bg-gray-300 z-50"
+                                    >
+                                        <FiArrowRight />
+                                    </button>
                                     <Image
                                         src={photos[currentIndex].image_url}
                                         alt={`Photo ${currentIndex + 1}`}
