@@ -4,15 +4,18 @@ import React, { useState } from 'react'
 import { FiArrowLeft, FiArrowRight, FiMinimize2 } from 'react-icons/fi'
 import { Button } from './ui/button';
 import clsx from 'clsx';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 function ImageGalleryUser({ photos }) {
     const [isOpen, setIsOpen] = useState(false); // Modal açık mı kapalı mı
     const [currentIndex, setCurrentIndex] = useState(0); // Şu anda hangi resim gösteriliyor
-    const [filterCol, setFilterCol] = useState(12);
+    const [filterCol, setFilterCol] = useState("6");
     const gridClass = clsx({
-        "lg:grid-cols-4": filterCol === 4,
-        "lg:grid-cols-6": filterCol === 6,
-        "lg:grid-cols-12": filterCol === 12,
+        "grid-cols-1": filterCol === "1",
+        "grid-cols-2": filterCol === "2",
+        "grid-cols-4": filterCol === "4",
+        "grid-cols-6": filterCol === "6",
+        "grid-cols-12": filterCol === "12",
     });
     const openModal = (index) => {
         setCurrentIndex(index);
@@ -34,17 +37,35 @@ function ImageGalleryUser({ photos }) {
     };
     return (
         <>
-            <div className="grid grid-cols-3 gap-6 mt-3">
-                <div className="text-3xl font-bold">Fotoğraf Galerisi</div>
-                <div className='lg:flex gap-2 justify-center items-center hidden lg:show'>
-                    <div>Filtreler:</div>
-                    <Button onClick={() => setFilterCol(4)}>4 li</Button>
-                    <Button onClick={() => setFilterCol(6)}>6 lı</Button>
-                    <Button onClick={() => setFilterCol(12)}>12 li</Button>
-                </div>
+            <div className="grid grid-cols-2 gap-6 mt-3">
+                <div className="text-3xl text-left font-bold">Fotoğraf Galerisi</div>
+
+                <>
+                    <div className='lg:flex gap-2 justify-end items-center hidden'>
+                        <div>Filtreler:</div>
+                        <Button onClick={() => setFilterCol("4")}>4 li</Button>
+                        <Button onClick={() => setFilterCol("6")}>6 lı</Button>
+                        <Button onClick={() => setFilterCol("12")}>12 li</Button>
+                    </div>
+                    <div className='flex justify-end items-center lg:hidden'>
+                        <Select onValueChange={(value) => setFilterCol(value)}>
+                            <SelectTrigger className="w-[100px] ">
+                                <SelectValue placeholder="Filtreler" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem value={"1"} >1 li</SelectItem>
+                                    <SelectItem value={"2"} >2 li</SelectItem>
+                                    <SelectItem value={"4"} >4 lü</SelectItem>
+                                    <SelectItem value={"6"} >6 lı</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </>
 
             </div>
-            <div className={`grid grid-cols-1 sm:grid-cols-2 ${gridClass} gap-6`}>
+            <div className={`grid ${gridClass} gap-6 mt-10`}>
                 {photos?.map((photo, index) => (
                     <div
                         key={index}

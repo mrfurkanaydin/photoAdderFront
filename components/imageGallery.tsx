@@ -81,36 +81,36 @@ function ImageGallery({ photos, type }) {
         <>
             <div className="grid grid-cols-2 gap-6 mt-3">
                 <div className="text-3xl text-left font-bold">Fotoğraf Galerisi</div>
-                {type === "customer" ? (
-                    <>
-                        <div className='lg:flex gap-2 justify-end items-center hidden'>
-                            <div>Filtreler:</div>
-                            <Button onClick={() => setFilterCol("4")}>4 li</Button>
-                            <Button onClick={() => setFilterCol("6")}>6 lı</Button>
-                            <Button onClick={() => setFilterCol("12")}>12 li</Button>||
-                            <Button onClick={sortByEmail}>Emaile Göre</Button> {/* Email'e göre sıralama */}
-                            <Button onClick={() => {
-                                setSortedPhotos([...photos]);
-                                setFilterType("all");
-                            }}>Tümünü Göster</Button>
-                        </div>
-                        <div className='flex justify-end items-center lg:hidden'>
-                            <Select onValueChange={(value) => setFilterCol(value)}>
-                                <SelectTrigger className="w-[100px] ">
-                                    <SelectValue placeholder="Filtreler" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem value={"1"} >1 li</SelectItem>
-                                        <SelectItem value={"2"} >2 li</SelectItem>
-                                        <SelectItem value={"4"} >4 lü</SelectItem>
-                                        <SelectItem value={"6"} >6 lı</SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </>
-                ) : <div></div>}
+
+                <>
+                    <div className='lg:flex gap-2 justify-end items-center hidden'>
+                        <div>Filtreler:</div>
+                        <Button onClick={() => setFilterCol("4")}>4 li</Button>
+                        <Button onClick={() => setFilterCol("6")}>6 lı</Button>
+                        <Button onClick={() => setFilterCol("12")}>12 li</Button>||
+                        <Button onClick={sortByEmail}>Emaile Göre</Button> {/* Email'e göre sıralama */}
+                        <Button onClick={() => {
+                            setSortedPhotos([...photos]);
+                            setFilterType("all");
+                        }}>Tümünü Göster</Button>
+                    </div>
+                    <div className='flex justify-end items-center lg:hidden'>
+                        <Select onValueChange={(value) => setFilterCol(value)}>
+                            <SelectTrigger className="w-[100px] ">
+                                <SelectValue placeholder="Filtreler" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem value={"1"} >1 li</SelectItem>
+                                    <SelectItem value={"2"} >2 li</SelectItem>
+                                    <SelectItem value={"4"} >4 lü</SelectItem>
+                                    <SelectItem value={"6"} >6 lı</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </>
+
             </div>
 
             <div className="mt-10">
