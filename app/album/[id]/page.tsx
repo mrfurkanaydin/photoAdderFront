@@ -7,10 +7,12 @@ import { createAlbumImage, getAllAlbumImages, getAllUserImages, upload } from '@
 import { Button } from '@/components/ui/button';
 import ImageGallery from '@/components/imageGallery';
 import ImageGalleryUser from '@/components/imageGalleryUser';
+import { Progress } from '@/components/ui/progress';
 function uploads() {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // Çoklu dosyalar
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const [photos, setPhotos] = useState([]);
+    const [progress, setProgress] = useState(0)
     const { data: session, status } = useSession();
     const token = session?.accessToken;
     const router = useRouter();
@@ -55,7 +57,8 @@ function uploads() {
             alert('Lütfen bir veya daha fazla dosya seçin');
             return;
         }
-
+        setProgress(1)
+        var progressUpdate = 100 / selectedFiles.length
         try {
             // Her bir dosya için yükleme işlemini yap
             for (const file of selectedFiles) {
@@ -67,12 +70,14 @@ function uploads() {
 
                 // Yüklenen dosyanın URL'sini albüme ekle
                 await createAlbumImage({ album_id: id, image_url: response.image_url }, token);
+                setProgress((prevProgress) => prevProgress + progressUpdate)
             }
 
             // Albüm resimlerini yenile
             getAlbumImage();
             setPreviewUrls([])
             setSelectedFiles([])
+            setProgress(0)
         } catch (error) {
             console.error('Error uploading the files:', error);
             alert('Yükleme sırasında hata oluştu.');
@@ -105,6 +110,9 @@ function uploads() {
                 >
                     Yükle
                 </Button>
+                {
+                    progress > 0 && <Progress value={progress} className="w-[60%] mt-5" />
+                }
             </form>
 
             {photos?.length > 0 ? <ImageGalleryUser photos={photos} /> : <> Henüz Hiç Fotoğraf Yüklenmedi</>}

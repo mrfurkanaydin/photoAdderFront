@@ -7,18 +7,19 @@ import QRCode from 'react-qr-code';
 import ImageGallery from '@/components/imageGallery';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Progress } from "@/components/ui/progress"
 
 function page() {
     const [qr, setQr] = useState(false)
     const [link, setLink] = useState("")
     const [photos, setPhotos] = useState([])
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([]); 
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
+    const [progress, setProgress] = useState(0)
     const { data: session } = useSession();
-    const router = useRouter();
+    const router = useRouter();    
     const token = session.accessToken;
-    const user = session.user
     const params = useParams();
     const { id } = params;
     useEffect(() => {
@@ -30,7 +31,7 @@ function page() {
         try {
             const { albums } = await getAlbum(id, token);
             console.log(albums);
-            
+
             if (albums.id == '00000000-0000-0000-0000-000000000000') {
                 router.push("/unauthorized")
                 return <></>
@@ -81,7 +82,7 @@ function page() {
         const previews = files.map(file => URL.createObjectURL(file));
         setPreviewUrls(previews); // Önizleme URL'leri state'e ekleniyor
     };
-    
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -89,10 +90,13 @@ function page() {
             alert('Lütfen bir veya daha fazla dosya seçin');
             return;
         }
-
+        setProgress(1)
+        var progressUpdate = 100 / selectedFiles.length
         try {
             // Her bir dosya için yükleme işlemini yap
             for (const file of selectedFiles) {
+                console.log("progres", progress, "progresSUpdate", progressUpdate, "sum", progress + progressUpdate);
+
                 const formData = new FormData();
                 formData.append('image', file);
 
@@ -100,13 +104,15 @@ function page() {
                 const response = await upload(formData, token);
 
                 // Yüklenen dosyanın URL'sini albüme ekle
-                await createAlbumImage({ album_id: id, image_url: response.image_url }, token);
+                await createAlbumImage({ album_id: id, image_url: response.image_url, file_size: response.size }, token);
+                setProgress((prevProgress) => prevProgress + progressUpdate)
             }
 
             // Albüm resimlerini yenile
             fetchDatas();
             setPreviewUrls([])
             setSelectedFiles([])
+            setProgress(0)
         } catch (error) {
             console.error('Error uploading the files:', error);
             alert('Yükleme sırasında hata oluştu.');
@@ -145,11 +151,15 @@ function page() {
                 >
                     Yükle
                 </Button>
+                {
+                    progress > 0 && <Progress value={progress} className="w-[60%] mt-5" />
+                }
+
             </form>
-            
+
 
             <div className="p-10 text-center">
-                <ImageGallery photos={photos} type="customer" />
+                {photos?.length > 0 ? <ImageGallery photos={photos} /> : <> Henüz Hiç Fotoğraf Yüklenmedi</>}
             </div>
         </>
     )

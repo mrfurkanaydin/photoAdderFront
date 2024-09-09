@@ -45,7 +45,7 @@ function Albums() {
         try {
             if (editId == "") {
                 const response = await CreateAlbum({ name: inputValue }, token)
-                console.log("createResponse",response);
+                console.log("createResponse", response);
             } else {
                 const response = await UpdateAlbumName(editId, { name: inputValue }, token)
                 console.log("updateResponse", response);
@@ -119,7 +119,7 @@ function Albums() {
                                             <TableRow key={album.id} className=''>
                                                 <TableCell className="font-medium w-[200px]">{album.name}</TableCell>
                                                 <TableCell className="font-medium text-center">{album.image_count}</TableCell>
-                                                <TableCell className="font-medium text-center">{Math.ceil(album.total_size_mb)}</TableCell>
+                                                <TableCell className="font-medium text-center">{album.total_size_mb.toFixed(1)}</TableCell>
                                                 <TableCell className="text-right">
                                                     <div className='flex justify-end gap-4'>
 

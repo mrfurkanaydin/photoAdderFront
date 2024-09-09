@@ -16,7 +16,7 @@ type Photo = {
     };
 };
 
-function ImageGallery({ photos, type }) {
+function ImageGallery({ photos }) {
     const [isOpen, setIsOpen] = useState(false); // Modal açık mı kapalı mı
     const [currentIndex, setCurrentIndex] = useState(0); // Şu anda hangi resim gösteriliyor
     const [filterType, setFilterType] = useState("all"); // Filtre tipi
